@@ -3,21 +3,22 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, toRefs } from 'vue'
 
 export const useToastEffect = () => {
   const toastData = reactive({
-    showToast: false,
+    show: false,
     toastMsg: ''
   })
   const showToast = (msg) => {
-    toastData.showToast = true
+    toastData.show = true
     toastData.toastMsg = msg
     setTimeout(() => {
-      toastData.showToast = false
+      toastData.show = false
     }, 3000)
   }
-  return { showToast, toastData }
+  const { show, toastMsg } = toRefs(toastData)
+  return { showToast, show, toastMsg }
 }
 
 export default {

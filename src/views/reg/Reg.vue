@@ -2,30 +2,73 @@
   <div class="wrapper">
     <img class="wrapper__img" src="http://www.dell-lee.com/imgs/vue3/user.png" alt="">
     <div class="wrapper__input">
-      <input type="text" class="wrapper__input__content" placeholder="请输入手机号">
+      <input type="text" class="wrapper__input__content" placeholder="请输入手机号" v-model="mobile">
     </div>
     <div class="wrapper__input">
-      <input type="password" class="wrapper__input__content" placeholder="请输入密码">
+      <input type="password" class="wrapper__input__content" placeholder="请输入密码" v-model="password">
     </div>
     <div class="wrapper__input">
-      <input type="password" class="wrapper__input__content" placeholder="确认密码">
+      <input type="password" class="wrapper__input__content" placeholder="确认密码" v-model="checkPwd">
     </div>
-    <div class="wrapper__reg-button">注册</div>
+    <div class="wrapper__reg-button" @click="handleReg">注册</div>
     <div class="wrapper__reg-link" @click="handleLogin">已有账号去登录</div>
+    <Toast v-if="show" :message="toastMsg"></Toast>
   </div>
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
+import { reactive, toRefs } from 'vue'
+import { post } from '@/utils/request'
+import Toast, { useToastEffect } from '@/components/Toast'
+
+// 注册相关逻辑
+const useRegEffect = (showToast) => {
+  const router = useRouter()
+  const data = reactive({
+    mobile: '',
+    password: '',
+    checkPwd: ''
+  })
+  const handleReg = async () => {
+    try {
+      const result = await post('/recommend/desc', {
+        username: data.mobile,
+        password: data.password
+      })
+      console.log(result)
+      router.push({ name: 'Login' })
+    } catch (e) {
+      showToast('请求失败')
+      console.log(e)
+    }
+  }
+  const { mobile, password, checkPwd } = toRefs(data)
+  return {
+    mobile, password, checkPwd, handleReg
+  }
+}
+
+const useLoginEffect = () => {
+  const router = useRouter()
+  const handleLogin = () => {
+    router.push({ name: 'Login' })
+  }
+  return {
+    handleLogin
+  }
+}
+
 export default {
   name: 'Reg',
+  components: { Toast },
   setup () {
-    const router = useRouter()
-    const handleLogin = () => {
-      router.push({ name: 'Login' })
-    }
+    const { handleLogin } = useLoginEffect()
+    const { showToast, show, toastMsg } = useToastEffect()
+    const { mobile, password, checkPwd, handleReg } = useRegEffect(showToast)
+
     return {
-      handleLogin
+      handleLogin, mobile, password, checkPwd, handleReg, show, toastMsg
     }
   }
 }
