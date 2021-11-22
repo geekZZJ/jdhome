@@ -1,5 +1,5 @@
 <template>
-  <div class="nearby__item" v-for="item in nearbyList" :key="item.title">
+  <div class="nearby__item" v-for="item in nearbyList" :key="item.title" @click="jumpToDetail(item.id)">
     <img class="nearby__item__img" :src="item.imgUrl" alt="">
     <div :class="{'nearby__item__content':true,'nearby__item__content--border':hideBorder}">
       <div class="nearby__item__content__title">{{item.title}}</div>
@@ -23,6 +23,13 @@ export default {
       type: Boolean,
       defailt: false
     }
+  },
+  emits: ['jumpToDetail'],
+  setup (props, { emit }) {
+    const jumpToDetail = (id) => {
+      emit('jumpToDetail', id)
+    }
+    return { jumpToDetail }
   }
 }
 </script>

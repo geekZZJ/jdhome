@@ -1,7 +1,7 @@
 <template>
   <div class="nearby">
     <div class="nearby__title">附近店铺</div>
-    <ShopInfo :nearbyList="nearbyList"></ShopInfo>
+    <ShopInfo :nearbyList="nearbyList" @jumpToDetail="jumpToDetail"></ShopInfo>
   </div>
 </template>
 
@@ -9,6 +9,7 @@
 import { ref } from 'vue'
 import { get } from '@/utils/request'
 import ShopInfo from '@/components/ShopInfo'
+import { useRouter } from 'vue-router'
 
 const useNearbyListEffect = () => {
   const nearbyList = ref([])
@@ -17,18 +18,21 @@ const useNearbyListEffect = () => {
     console.log(result)
     nearbyList.value = [
       {
+        id: 1,
         title: '沃尔玛',
         imgUrl: 'http://www.dell-lee.com/imgs/vue3/near.png',
         tags: ['月售1万+', '起送¥0', '基础运费¥5'],
         desc: 'VIP尊享满89元减4元运费券（每月3张）'
       },
       {
+        id: 2,
         title: '苏宁',
         imgUrl: 'http://www.dell-lee.com/imgs/vue3/near.png',
         tags: ['月售1万+', '起送¥0', '基础运费¥5'],
         desc: 'VIP尊享满89元减4元运费券（每月3张）'
       },
       {
+        id: 3,
         title: '京东',
         imgUrl: 'http://www.dell-lee.com/imgs/vue3/near.png',
         tags: ['月售1万+', '起送¥0', '基础运费¥5'],
@@ -39,6 +43,14 @@ const useNearbyListEffect = () => {
   return { nearbyList, getNearbyList }
 }
 
+const jumpToDetailEffect = () => {
+  const router = useRouter()
+  const jumpToDetail = (params) => {
+    router.push({ path: `/shop/${params}` })
+  }
+  return { jumpToDetail }
+}
+
 export default {
   name: 'Nearby',
   components: {
@@ -47,7 +59,8 @@ export default {
   setup () {
     const { nearbyList, getNearbyList } = useNearbyListEffect()
     getNearbyList()
-    return { nearbyList }
+    const { jumpToDetail } = jumpToDetailEffect()
+    return { nearbyList, jumpToDetail }
   }
 }
 </script>
