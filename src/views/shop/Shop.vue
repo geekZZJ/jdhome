@@ -8,6 +8,7 @@
       </div>
     </div>
     <ShopInfo :nearbyList="item" :hideBorder="true"></ShopInfo>
+    <Content></Content>
   </div>
 </template>
 
@@ -15,6 +16,7 @@
 import ShopInfo from '@/components/ShopInfo'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, toRefs } from 'vue'
+import Content from './Content'
 
 const handleBackEffect = () => {
   const router = useRouter()
@@ -44,7 +46,7 @@ const useShopInfoEffect = () => {
 }
 export default {
   name: 'Shop',
-  components: { ShopInfo },
+  components: { Content, ShopInfo },
   setup () {
     const { handleBackClick } = handleBackEffect()
     const { item } = useShopInfoEffect()
