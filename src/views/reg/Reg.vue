@@ -111,10 +111,10 @@ export default {
     }
   }
   &__reg-button{
-    background-color: #0091ff;
+    background-color: $btn-bgColor;
     box-shadow: 0 .04rem .08rem 0 rgba(0,145,255,.32);
     border-radius: .04rem;
-    color: #fff;
+    color: $bg-color;
     margin: .32rem .4rem .16rem .4rem;
     line-height: .48rem;
     font-size: .16rem;

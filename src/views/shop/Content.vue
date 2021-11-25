@@ -37,6 +37,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../../style/variable";
+@import "../../style/mixins";
 .content{
   display: flex;
   position: absolute;
@@ -46,16 +48,16 @@ export default {
   bottom: .5rem;
   .category{
     width: .76rem;
-    background-color: #f5f5f5;
+    background-color: $search-bgColor;
     height: 100%;
     overflow-y: scroll;
     &__item{
       line-height: .4rem;
       text-align: center;
       font-size: .14rem;
-      color: #333;
+      color: $content-fontcolor;
       &--active{
-        background-color: #fff;
+        background-color: $bg-color;
       }
     }
   }
@@ -67,36 +69,38 @@ export default {
       display: flex;
       padding: .12rem 0;
       margin: 0 .16rem;
-      border-bottom: .01rem solid #f1f1f1;
+      border-bottom: .01rem solid $content-bgColor;
       &__img{
         width: .68rem;
         height: .68rem;
         margin-right: .16rem;
       }
       &__detail{
+        overflow: hidden;
         &__title{
+          @include ellipsis();
           line-height: .2rem;
           font-size: .14rem;
-          color: #333;
+          color: $content-fontcolor;
           font-weight: bold;
         }
         &__sales{
           margin: .06rem 0;
           line-height: .16rem;
           font-size: .12rem;
-          color: #333;
+          color: $content-fontcolor;
         }
         &__price{
           line-height: .2rem;
           font-size: .14rem;
-          color: #e93b3b;
+          color: $highlight-fontColor;
         }
         &__yen{
           font-size: .12rem;
         }
         &__origin{
           font-size: .12rem;
-          color: #999;
+          color: $light-fontColor;
           text-decoration: line-through;
           margin-left: .06rem;
         }
@@ -115,13 +119,13 @@ export default {
           line-height: .16rem;
         }
         &__minus{
-          border: .01rem solid #666;
-          color: #666;
+          border: .01rem solid $medium-fontColor;
+          color: $medium-fontColor;
           margin-right: .05rem;
         }
         &__plus{
-          background-color: #0091ff;
-          color: #fff;
+          background-color: $btn-bgColor;
+          color: $bg-color;
           margin-left: .05rem;
         }
       }

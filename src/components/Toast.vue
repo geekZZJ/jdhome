@@ -33,6 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../style/variable";
 .toast {
   position: fixed;
   left: 50%;
@@ -41,6 +42,6 @@ export default {
   background-color: rgba(0, 0, 0, 0.35);
   padding: 0.1rem;
   border-radius: 0.05rem;
-  color: #fff;
+  color: $bg-color;
 }
 </style>>
