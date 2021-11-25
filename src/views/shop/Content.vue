@@ -1,10 +1,10 @@
 <template>
   <div class="content">
     <div class="category">
-      <div class="category__item category__item--active" v-for="item in categories" :key="item.type">{{item.name}}</div>
+      <div :class="{'category__item':true,'category__item--active':currentTab===item.type}" v-for="item in categories" :key="item.type" @click="handleTabClick(item.type)">{{item.name}}</div>
     </div>
     <div class="product">
-      <div class="product__item" v-for="item in contentList" :key="item.id">
+      <div class="product__item" v-for="item in list" :key="item.id">
         <img class="product__item__img" src="http://www.dell-lee.com/imgs/vue3/near.png" alt="">
         <div class="product__item__detail">
           <div class="product__item__detail__title">{{item.title}}</div>
@@ -26,36 +26,51 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
-export default {
-  name: 'Content',
-  setup () {
-    const categories = [
-      {
-        name: '全部商品',
-        type: 'all'
-      },
-      {
-        name: '秒杀',
-        type: 'second'
-      }, {
-        name: '新鲜水果',
-        type: 'fruit'
-      }, {
-        name: '休闲食品',
-        type: 'food'
-      }, {
-        name: '时令蔬菜',
-        type: 'vegetables'
-      }, {
-        name: '肉蛋家禽',
-        type: 'egg'
-      }
-    ]
-    const data = reactive({
-      contentList: []
-    })
-    data.contentList = [
+import { reactive, toRefs, ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+
+const categories = [
+  {
+    name: '全部商品',
+    type: 'all'
+  },
+  {
+    name: '秒杀',
+    type: 'second'
+  }, {
+    name: '新鲜水果',
+    type: 'fruit'
+  }, {
+    name: '休闲食品',
+    type: 'food'
+  }, {
+    name: '时令蔬菜',
+    type: 'vegetables'
+  }, {
+    name: '肉蛋家禽',
+    type: 'egg'
+  }
+]
+
+// 和tab切换相关的逻辑
+const useTabEffect = () => {
+  const currentTab = ref(categories[0].type)
+  const handleTabClick = (tab) => {
+    currentTab.value = tab
+  }
+  return { currentTab, handleTabClick }
+}
+
+// 列表内容相关的逻辑
+const useCurrentListEffect = (currentTab) => {
+  const content = reactive({
+    list: []
+  })
+  const route = useRoute()
+  console.log(route.params.id)
+  watchEffect(() => {
+    console.log(currentTab.value)
+    content.list = [
       {
         id: 1,
         title: '番茄250g/份',
@@ -69,10 +84,26 @@ export default {
         sales: 11,
         price: '33.6',
         origin: '66.6'
+      },
+      {
+        id: 3,
+        title: '香肠250g/份',
+        sales: 12,
+        price: '33.6',
+        origin: '66.6'
       }
     ]
-    const { contentList } = toRefs(data)
-    return { contentList, categories }
+  })
+  const { list } = toRefs(content)
+  return { list }
+}
+
+export default {
+  name: 'Content',
+  setup () {
+    const { currentTab, handleTabClick } = useTabEffect()
+    const { list } = useCurrentListEffect(currentTab)
+    return { list, currentTab, categories, handleTabClick }
   }
 }
 </script>
