@@ -1,23 +1,18 @@
 <template>
   <div class="content">
     <div class="category">
-      <div class="category__item category__item--active">全部商品</div>
-      <div class="category__item">秒杀</div>
-      <div class="category__item">新鲜水果</div>
-      <div class="category__item">休闲食品</div>
-      <div class="category__item">时令蔬菜</div>
-      <div class="category__item">肉蛋家禽</div>
+      <div class="category__item category__item--active" v-for="item in categories" :key="item.type">{{item.name}}</div>
     </div>
     <div class="product">
-      <div class="product__item">
+      <div class="product__item" v-for="item in contentList" :key="item.id">
         <img class="product__item__img" src="http://www.dell-lee.com/imgs/vue3/near.png" alt="">
         <div class="product__item__detail">
-          <div class="product__item__detail__title">番茄250g/份</div>
-          <div class="product__item__detail__sales">月售10件</div>
+          <div class="product__item__detail__title">{{item.title}}</div>
+          <div class="product__item__detail__sales">月售{{item.sales}}件</div>
           <div class="product__item__detail__price">
             <span class="product__item__detail__yen">&yen;</span>
-            <span>33.6</span>
-            <span class="product__item__detail__origin">&yen;66.6</span>
+            <span>{{item.price}}</span>
+            <span class="product__item__detail__origin">&yen;{{item.origin}}</span>
           </div>
         </div>
         <div class="product__item__num">
@@ -31,8 +26,54 @@
 </template>
 
 <script>
+import { reactive, toRefs } from 'vue'
 export default {
-  name: 'Content'
+  name: 'Content',
+  setup () {
+    const categories = [
+      {
+        name: '全部商品',
+        type: 'all'
+      },
+      {
+        name: '秒杀',
+        type: 'second'
+      }, {
+        name: '新鲜水果',
+        type: 'fruit'
+      }, {
+        name: '休闲食品',
+        type: 'food'
+      }, {
+        name: '时令蔬菜',
+        type: 'vegetables'
+      }, {
+        name: '肉蛋家禽',
+        type: 'egg'
+      }
+    ]
+    const data = reactive({
+      contentList: []
+    })
+    data.contentList = [
+      {
+        id: 1,
+        title: '番茄250g/份',
+        sales: 10,
+        price: '33.6',
+        origin: '66.6'
+      },
+      {
+        id: 2,
+        title: '茄子250g/份',
+        sales: 11,
+        price: '33.6',
+        origin: '66.6'
+      }
+    ]
+    const { contentList } = toRefs(data)
+    return { contentList, categories }
+  }
 }
 </script>
 
