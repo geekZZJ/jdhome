@@ -9,7 +9,7 @@
       <div class="category__item">肉蛋家禽</div>
     </div>
     <div class="product">
-      <div class="product__item" v-for="item in [1,2,3,4,5,6,7]" :key="item">
+      <div class="product__item">
         <img class="product__item__img" src="http://www.dell-lee.com/imgs/vue3/near.png" alt="">
         <div class="product__item__detail">
           <div class="product__item__detail__title">番茄250g/份</div>
@@ -19,6 +19,11 @@
             <span>33.6</span>
             <span class="product__item__detail__origin">&yen;66.6</span>
           </div>
+        </div>
+        <div class="product__item__num">
+          <span class="product__item__num__minus">-</span>
+          <span>0</span>
+          <span class="product__item__num__plus">+</span>
         </div>
       </div>
     </div>
@@ -58,6 +63,7 @@ export default {
     flex: 1;
     overflow-y: scroll;
     &__item{
+      position: relative;
       display: flex;
       padding: .12rem 0;
       margin: 0 .16rem;
@@ -93,6 +99,30 @@ export default {
           color: #999;
           text-decoration: line-through;
           margin-left: .06rem;
+        }
+      }
+      &__num{
+        position: absolute;
+        right: 0;
+        bottom: .12rem;
+        &__minus,&__plus{
+          width: .2rem;
+          height: .2rem;
+          display: inline-block;
+          border-radius: 50%;
+          font-size: .2rem;
+          text-align: center;
+          line-height: .16rem;
+        }
+        &__minus{
+          border: .01rem solid #666;
+          color: #666;
+          margin-right: .05rem;
+        }
+        &__plus{
+          background-color: #0091ff;
+          color: #fff;
+          margin-left: .05rem;
         }
       }
     }
