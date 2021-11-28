@@ -17,8 +17,8 @@
         </div>
         <div class="product__item__num">
           <span class="product__item__num__minus">-</span>
-          <span>0</span>
-          <span class="product__item__num__plus">+</span>
+          <span>{{cartList.count}}</span>
+          <span class="product__item__num__plus" @click="addItemCart">+</span>
         </div>
       </div>
     </div>
@@ -28,6 +28,7 @@
 <script>
 import { reactive, toRefs, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 const categories = [
   {
@@ -59,6 +60,15 @@ const useTabEffect = () => {
     currentTab.value = tab
   }
   return { currentTab, handleTabClick }
+}
+
+const useCartEffect = () => {
+  const store = useStore()
+  const { cartList } = toRefs(store.state)
+  const addItemCart = () => {
+    store.commit('addItemToCart', 1)
+  }
+  return { cartList, addItemCart }
 }
 
 // 列表内容相关的逻辑
@@ -103,7 +113,8 @@ export default {
   setup () {
     const { currentTab, handleTabClick } = useTabEffect()
     const { list } = useCurrentListEffect(currentTab)
-    return { list, currentTab, categories, handleTabClick }
+    const { cartList, addItemCart } = useCartEffect()
+    return { cartList, list, currentTab, categories, handleTabClick, addItemCart }
   }
 }
 </script>
