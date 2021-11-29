@@ -7,9 +7,12 @@ export default createStore({
     }
   },
   mutations: {
-    addItemToCart (state, payload) {
+    changeItemToCart (state, payload) {
       const cartList = state.cartList
       cartList.count += payload
+      if (cartList.count < 0) {
+        cartList.count = 0
+      }
     }
   },
   actions: {

@@ -16,9 +16,9 @@
           </div>
         </div>
         <div class="product__item__num">
-          <span class="product__item__num__minus">-</span>
+          <span class="product__item__num__minus" @click="changeItemCart(-1)">-</span>
           <span>{{cartList.count}}</span>
-          <span class="product__item__num__plus" @click="addItemCart">+</span>
+          <span class="product__item__num__plus" @click="changeItemCart(1)">+</span>
         </div>
       </div>
     </div>
@@ -65,10 +65,10 @@ const useTabEffect = () => {
 const useCartEffect = () => {
   const store = useStore()
   const { cartList } = toRefs(store.state)
-  const addItemCart = () => {
-    store.commit('addItemToCart', 1)
+  const changeItemCart = (num) => {
+    store.commit('changeItemToCart', num)
   }
-  return { cartList, addItemCart }
+  return { cartList, changeItemCart }
 }
 
 // 列表内容相关的逻辑
@@ -113,8 +113,8 @@ export default {
   setup () {
     const { currentTab, handleTabClick } = useTabEffect()
     const { list } = useCurrentListEffect(currentTab)
-    const { cartList, addItemCart } = useCartEffect()
-    return { cartList, list, currentTab, categories, handleTabClick, addItemCart }
+    const { cartList, changeItemCart } = useCartEffect()
+    return { cartList, list, currentTab, categories, handleTabClick, changeItemCart }
   }
 }
 </script>

@@ -4,10 +4,10 @@
     <div class="check">
       <div class="check__icon">
         <img src="http://www.dell-lee.com/imgs/vue3/basket.png" alt="" class="check__icon__img">
-        <div class="check__icon__tag">1</div>
+        <div class="check__icon__tag">{{total}}</div>
       </div>
       <div class="check__info">
-        总结：<span class="check__info__price">&yen;127</span>
+        总结：<span class="check__info__price">&yen; {{price}}</span>
       </div>
       <div class="check__btn">去结算</div>
     </div>
@@ -15,8 +15,26 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
+const useCartEffect = () => {
+  const store = useStore()
+  const cartList = store.state.cartList
+  const total = computed(() => {
+    return cartList.count
+  })
+  const price = computed(() => {
+    return (cartList.count * 10).toFixed(2)
+  })
+  return { total, price }
+}
 export default {
-  name: 'Cart'
+  name: 'Cart',
+  setup () {
+    const { total, price } = useCartEffect()
+    return { total, price }
+  }
 }
 </script>
 
