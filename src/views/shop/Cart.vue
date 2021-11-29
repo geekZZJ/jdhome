@@ -1,6 +1,23 @@
-<link rel="stylesheet" href="../../style/variable.scss">
 <template>
   <div class="cart">
+    <div class="product">
+      <div class="product__item" v-for="item in list" :key="item.id">
+        <img class="product__item__img" src="http://www.dell-lee.com/imgs/vue3/near.png" alt="">
+        <div class="product__item__detail">
+          <div class="product__item__detail__title">{{item.title}}</div>
+          <div class="product__item__detail__price">
+            <span class="product__item__detail__yen">&yen;</span>
+            <span>{{item.price}}</span>
+            <span class="product__item__detail__origin">&yen;{{item.origin}}</span>
+          </div>
+        </div>
+        <div class="product__item__num">
+          <span class="product__item__num__minus" @click="changeItemCart(-1)">-</span>
+          <span>{{cartList.count}}</span>
+          <span class="product__item__num__plus" @click="changeItemCart(1)">+</span>
+        </div>
+      </div>
+    </div>
     <div class="check">
       <div class="check__icon">
         <img src="http://www.dell-lee.com/imgs/vue3/basket.png" alt="" class="check__icon__img">
@@ -27,19 +44,43 @@ const useCartEffect = () => {
   const price = computed(() => {
     return (cartList.count * 10).toFixed(2)
   })
-  return { total, price }
+  return { total, price, cartList }
 }
 export default {
   name: 'Cart',
   setup () {
-    const { total, price } = useCartEffect()
-    return { total, price }
+    const list = [
+      {
+        id: 1,
+        title: '番茄250g/份',
+        sales: 10,
+        price: '33.6',
+        origin: '66.6'
+      },
+      {
+        id: 2,
+        title: '茄子250g/份',
+        sales: 11,
+        price: '33.6',
+        origin: '66.6'
+      },
+      {
+        id: 3,
+        title: '香肠250g/份',
+        sales: 12,
+        price: '33.6',
+        origin: '66.6'
+      }
+    ]
+    const { total, price, cartList } = useCartEffect()
+    return { total, price, list, cartList }
   }
 }
 </script>
 
 <style scoped lang="scss">
 @import "../../style/variable";
+@import "../../style/mixins";
 .cart{
   position: absolute;
   left: 0;
@@ -93,6 +134,72 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+  }
+  .product{
+    flex: 1;
+    overflow-y: scroll;
+    background-color: #fff;
+    &__item{
+      position: relative;
+      display: flex;
+      padding: .12rem 0;
+      margin: 0 .16rem;
+      border-bottom: .01rem solid $content-bgColor;
+      &__img{
+        width: .46rem;
+        height: .46rem;
+        margin-right: .16rem;
+      }
+      &__detail{
+        overflow: hidden;
+        &__title{
+          @include ellipsis();
+          line-height: .2rem;
+          font-size: .14rem;
+          color: $content-fontcolor;
+          font-weight: bold;
+        }
+        &__price{
+          line-height: .2rem;
+          font-size: .14rem;
+          color: $highlight-fontColor;
+          margin-top: .06rem;
+        }
+        &__yen{
+          font-size: .12rem;
+        }
+        &__origin{
+          font-size: .12rem;
+          color: $light-fontColor;
+          text-decoration: line-through;
+          margin-left: .06rem;
+        }
+      }
+      &__num{
+        position: absolute;
+        right: 0;
+        bottom: .12rem;
+        &__minus,&__plus{
+          width: .2rem;
+          height: .2rem;
+          display: inline-block;
+          border-radius: 50%;
+          font-size: .2rem;
+          text-align: center;
+          line-height: .16rem;
+        }
+        &__minus{
+          border: .01rem solid $medium-fontColor;
+          color: $medium-fontColor;
+          margin-right: .05rem;
+        }
+        &__plus{
+          background-color: $btn-bgColor;
+          color: $bg-color;
+          margin-left: .05rem;
+        }
+      }
     }
   }
 }
