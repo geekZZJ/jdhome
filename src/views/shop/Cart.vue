@@ -1,22 +1,24 @@
 <template>
   <div class="cart">
     <div class="product">
-      <div class="product__item" v-for="item in list" :key="item.id">
-        <img class="product__item__img" src="http://www.dell-lee.com/imgs/vue3/near.png" alt="">
-        <div class="product__item__detail">
-          <div class="product__item__detail__title">{{item.title}}</div>
-          <div class="product__item__detail__price">
-            <span class="product__item__detail__yen">&yen;</span>
-            <span>{{item.price}}</span>
-            <span class="product__item__detail__origin">&yen;{{item.origin}}</span>
+      <template v-for="item in list" :key="item.id">
+        <div class="product__item" v-if="cartList.count">
+          <img class="product__item__img" src="http://www.dell-lee.com/imgs/vue3/near.png" alt="">
+          <div class="product__item__detail">
+            <div class="product__item__detail__title">{{item.title}}</div>
+            <div class="product__item__detail__price">
+              <span class="product__item__detail__yen">&yen;</span>
+              <span>{{item.price}}</span>
+              <span class="product__item__detail__origin">&yen;{{item.origin}}</span>
+            </div>
+          </div>
+          <div class="product__item__num">
+            <span class="product__item__num__minus" @click="changeItemCart(-1)">-</span>
+            <span>{{cartList.count}}</span>
+            <span class="product__item__num__plus" @click="changeItemCart(1)">+</span>
           </div>
         </div>
-        <div class="product__item__num">
-          <span class="product__item__num__minus" @click="changeItemCart(-1)">-</span>
-          <span>{{cartList.count}}</span>
-          <span class="product__item__num__plus" @click="changeItemCart(1)">+</span>
-        </div>
-      </div>
+      </template>
     </div>
     <div class="check">
       <div class="check__icon">
@@ -46,6 +48,15 @@ const useCartEffect = () => {
   })
   return { total, price, cartList }
 }
+
+const useCarEffect = () => {
+  const store = useStore()
+  const changeItemCart = (num) => {
+    store.commit('changeItemToCart', num)
+  }
+  return { changeItemCart }
+}
+
 export default {
   name: 'Cart',
   setup () {
@@ -73,7 +84,8 @@ export default {
       }
     ]
     const { total, price, cartList } = useCartEffect()
-    return { total, price, list, cartList }
+    const { changeItemCart } = useCarEffect()
+    return { total, price, list, cartList, changeItemCart }
   }
 }
 </script>
