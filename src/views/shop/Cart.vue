@@ -1,8 +1,13 @@
 <template>
   <div class="cart">
     <div class="product">
+      <div class="product__header">
+        <div class="product__header__all"><span class="product__header__all__icon iconfont">&#xe6f7;</span>全选</div>
+        <div class="product__header__clear" @click="cleanCart">清空购物车</div>
+      </div>
       <template v-for="item in list" :key="item.id">
         <div class="product__item" v-if="cartList.count">
+          <div class="product__item__checked iconfont" v-html="cartList.checked?'&#xe652;':'&#xe6f7;'" @click="changeCartItemCheck"></div>
           <img class="product__item__img" src="http://www.dell-lee.com/imgs/vue3/near.png" alt="">
           <div class="product__item__detail">
             <div class="product__item__detail__title">{{item.title}}</div>
@@ -37,7 +42,7 @@
 import { useStore } from 'vuex'
 import { computed } from 'vue'
 
-const useCartEffect = () => {
+const useCartEffect = (list) => {
   const store = useStore()
   const cartList = store.state.cartList
   const total = computed(() => {
@@ -46,7 +51,14 @@ const useCartEffect = () => {
   const price = computed(() => {
     return (cartList.count * 10).toFixed(2)
   })
-  return { total, price, cartList }
+  const changeCartItemCheck = () => {
+    store.commit('changeCartItemCheck')
+  }
+
+  const cleanCart = () => {
+    console.log(list)
+  }
+  return { total, price, cartList, changeCartItemCheck, cleanCart }
 }
 
 const useCarEffect = () => {
@@ -83,9 +95,9 @@ export default {
         origin: '66.6'
       }
     ]
-    const { total, price, cartList } = useCartEffect()
+    const { total, price, cartList, changeCartItemCheck, cleanCart } = useCartEffect(list)
     const { changeItemCart } = useCarEffect()
-    return { total, price, list, cartList, changeItemCart }
+    return { total, price, list, cartList, changeItemCart, changeCartItemCheck, cleanCart }
   }
 }
 </script>
@@ -152,12 +164,38 @@ export default {
     flex: 1;
     overflow-y: scroll;
     background-color: #fff;
+    &__header{
+      line-height: .52rem;
+      border-bottom: 1px solid #f1f1f1;
+      display: flex;
+      font-size: .14rem;
+      color: #333;
+      &__all{
+        width: .64rem;
+        margin-left: .18rem;
+        &__icon{
+          color: #0091ff;
+          font-size: .2rem;
+        }
+      }
+      &__clear{
+        flex: 1;
+        text-align: right;
+        margin-right: .16rem;
+      }
+    }
     &__item{
       position: relative;
       display: flex;
       padding: .12rem 0;
       margin: 0 .16rem;
       border-bottom: .01rem solid $content-bgColor;
+      &__checked{
+        color: #0091ff;
+        font-size: .2rem;
+        line-height: .5rem;
+        margin-right: .2rem;
+      }
       &__img{
         width: .46rem;
         height: .46rem;
